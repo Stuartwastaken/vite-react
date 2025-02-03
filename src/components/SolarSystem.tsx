@@ -9,10 +9,9 @@ import LagrangeVertices from './LagrangeVertices';
 interface SolarSystemProps {
   timeScale: number;
   showLagrangePoints: boolean;
-  startTransferPath: boolean;
 }
 
-const SolarSystem: React.FC<SolarSystemProps> = ({ timeScale, showLagrangePoints, startTransferPath }) => {
+const SolarSystem: React.FC<SolarSystemProps> = ({ timeScale, showLagrangePoints }) => {
   return (
     <>
       <Sun />
@@ -21,7 +20,6 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ timeScale, showLagrangePoints
       ))}
       <GravityGrid timeScale={timeScale} />
       {showLagrangePoints && <LagrangeVertices timeScale={timeScale} visible={true} />}
-      {startTransferPath && <TransferPath timeScale={timeScale} />}
     </>
   );
 };

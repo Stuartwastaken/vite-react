@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from 'react';
-import { useFrame, extend, Object3DNode } from '@react-three/fiber';
-import { shaderMaterial } from '@react-three/drei';
-import * as THREE from 'three';
-import { BODIES, AU_SCALE } from './CelestialBodies';
+import React, { useRef, useEffect } from "react";
+import { useFrame, extend, Object3DNode } from "@react-three/fiber";
+import { shaderMaterial } from "@react-three/drei";
+import * as THREE from "three";
+import { BODIES, AU_SCALE } from "./CelestialBodies";
 
 const NUM_BODIES = BODIES.length; // e.g. 9
 
@@ -17,8 +17,8 @@ const GravityGridMaterial = shaderMaterial(
     time: 0.0,
   },
   // Vertex Shader
-  
-   ` #define NUM_BODIES ${NUM_BODIES}
+
+  ` #define NUM_BODIES ${NUM_BODIES}
     uniform vec3 planetPositions[NUM_BODIES];
     uniform float planetMasses[NUM_BODIES];
     uniform int numPlanets;
@@ -44,13 +44,12 @@ const GravityGridMaterial = shaderMaterial(
       
       gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
     }
-      `
-  ,
+      `,
   // Fragment Shader – mix between light grey and dark grey based on warp depth.
-  
-   ` varying float vWarp;
+
+  ` varying float vWarp;
     void main() {
-      float shade = mix(0.6, 0.01, vWarp);
+      float shade = mix(0.6, 0.01, (vWarp * 1.2));
       gl_FragColor = vec4(vec3(shade), 1.0);
     }
   `
@@ -61,7 +60,10 @@ extend({ GravityGridMaterial });
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      gravityGridMaterial: Object3DNode<THREE.ShaderMaterial, typeof GravityGridMaterial>;
+      gravityGridMaterial: Object3DNode<
+        THREE.ShaderMaterial,
+        typeof GravityGridMaterial
+      >;
     }
   }
 }
@@ -88,7 +90,8 @@ const GravityGrid: React.FC<GravityGridProps> = ({ timeScale }) => {
     // Compute the current (x,z) positions of each body from the shared BODIES array.
     BODIES.forEach((body) => {
       const orbitRadius = body.orbitRadiusAU * AU_SCALE;
-      const angle = body.orbitalPeriodEarthYears > 0 ? t * body.angularSpeed : 0;
+      const angle =
+        body.orbitalPeriodEarthYears > 0 ? t * body.angularSpeed : 0;
       const x = orbitRadius * Math.cos(angle);
       const z = orbitRadius * Math.sin(angle);
       positions.push(new THREE.Vector3(x, 0, z));
@@ -105,7 +108,7 @@ const GravityGrid: React.FC<GravityGridProps> = ({ timeScale }) => {
   return (
     // The grid is positioned beneath the solar system.
     <mesh position={[0, 25, 0]}>
-      <planeGeometry ref={geometryRef} args={[3000, 3000, 1000, 1000]} />
+      <planeGeometry ref={geometryRef} args={[3200, 3200, 1000, 1000]} />
       <gravityGridMaterial
         ref={materialRef}
         side={THREE.DoubleSide}

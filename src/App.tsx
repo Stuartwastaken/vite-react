@@ -6,8 +6,8 @@ import SolarSystem from '../src/components/SolarSystem';
 
 const App: React.FC = () => {
   const [slowTime, setSlowTime] = useState(true);
-  // When slowTime is enabled, the simulation runs at 1/10th speed.
-  const timeScale = slowTime ? 0.1 : 1.0;
+  // When slowTime is enabled, the simulation runs at 1/50th speed.
+  const timeScale = slowTime ? 0.02 : 0.2;
 
 return (
   <div style={{ width: '100vw', height: '100vh' }}>
